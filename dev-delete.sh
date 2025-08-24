@@ -6,3 +6,4 @@ kafkactl delete topic inference.request
 kafkactl delete topic inference.result
 kafkactl delete topic response.delivery
 kafkactl delete topic feedback.stub
+kafkactl delete topic logs.parsed

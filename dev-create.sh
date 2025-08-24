@@ -1,8 +1,9 @@
 #!/bin/zsh
-kafkactl create topic saga.prompt.raw
-kafkactl create topic prompt.raw
-kafkactl create topic prompt.clean
-kafkactl create topic inference.request
-kafkactl create topic inference.result
-kafkactl create topic response.delivery
-kafkactl create topic feedback.stub
+kafkactl create topic prompt
+kafkactl create topic saga.in
+kafkactl create topic saga.out
+kafkactl create topic read
+kafkactl create topic write
+kafkactl create topic vec
+kafkactl create topic response
+kafkactl create topic logs.parsed
