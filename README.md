@@ -1,2 +1,2 @@
-# lark-kafka
-application:LLM Client Kafka
+# lark-bp
+application:LLM Client Infrastructure, Configuration, and Operation
