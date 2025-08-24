@@ -1,0 +1,25 @@
+---
+- name: Clone
+  hosts: local
+  connection: local
+
+  tasks:
+  - name: Check Web
+    ansible.builtin.stat:
+      path: ../../../lark-web
+    register: web_dir
+
+  - name: Create Web
+    ansible.builtin.file:
+      path: ../../../lark-web
+      state: directory
+      mode: '0755'
+      owner: tymalik
+      group: staff
+    when: not web_dir.stat.exists
+
+  - name: Checkout Web
+    ansible.builtin.git:
+      repo: git@github.com:permalik/lark-web.git
+      dest: ../../../lark-web
+    when: not web_dir.stat.exists
