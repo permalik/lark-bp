@@ -1,0 +1,36 @@
+---
+- name: Init System
+  hosts: local
+  connection: local
+
+  vars:
+    repos:
+      - path: ../../../lark-web
+        name: lark-web
+        repo: git@github.com:permalik/lark-web.git
+      - path: ../../../lark-api
+        name: lark-api
+        repo: git@github.com:permalik/lark-api.git
+      - path: ../../../lark-pipe
+        name: lark-pipe
+        repo: git@github.com:permalik/lark-pipe.git
+      - path: ../../../lark-llm
+        name: lark-llm
+        repo: git@github.com:permalik/lark-llm.git
+      - path: ../../../lark-side
+        name: lark-side
+        repo: git@github.com:permalik/lark-side.git
+      - path: ../../../lark-orc
+        name: lark-orc
+        repo: git@github.com:permalik/lark-orc.git
+      - path: ../../../lark-bus
+        name: lark-bus
+        repo: git@github.com:permalik/lark-bus.git
+
+  tasks:
+    - name: Process each repository
+      ansible.builtin.include_tasks: init_clone.yml
+      loop: "{{ repos }}"
+      loop_control:
+        loop_var: repo
+

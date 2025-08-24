@@ -1,0 +1,37 @@
+- name: Check if repo exists
+  ansible.builtin.stat:
+    path: "{{ item.path }}"
+  register: repo_stat
+
+- name: Process git if repo exists
+  when: repo_stat.stat.exists
+  block:
+    - name: Check for uncommitted changes
+      ansible.builtin.command: git status --porcelain
+      args:
+        chdir: "{{ item.path }}"
+      register: git_status
+      changed_when: false
+
+    - name: Stage any changes
+      ansible.builtin.command: git add -A
+      args:
+        chdir: "{{ item.path }}"
+      when: git_status.stdout != ""
+
+    - name: Commit any changes
+      ansible.builtin.command: git commit -m "{{ item.commit_message }}"
+      args:
+        chdir: "{{ item.path }}"
+      when: git_status.stdout != ""
+
+    - name: Push any changes
+      ansible.builtin.command: git push
+      args:
+        chdir: "{{ item.path }}"
+      when: git_status.stdout != ""
+
+    - name: Remove repository directory
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent

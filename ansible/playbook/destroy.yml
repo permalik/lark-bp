@@ -1,0 +1,35 @@
+---
+- name: Destroy System
+  hosts: local
+  connection: local
+
+  vars:
+    repos:
+      - path: ../../../lark-web
+        name: lark-web
+        commit_message: "destroy: local auto-commit"
+      - path: ../../../lark-api
+        name: lark-api
+        commit_message: "destroy: local auto-commit"
+      - path: ../../../lark-pipe
+        name: lark-pipe
+        commit_message: "destroy: local auto-commit"
+      - path: ../../../lark-llm
+        name: lark-llm
+        commit_message: "destroy: local auto-commit"
+      - path: ../../../lark-side
+        name: lark-side
+        commit_message: "destroy: local auto-commit"
+      - path: ../../../lark-orc
+        name: lark-orc
+        commit_message: "destroy: local auto-commit"
+      - path: ../../../lark-bus
+        name: lark-bus
+        commit_message: "destroy: local auto-commit"
+
+  tasks:
+    - name: Clean repositories
+      ansible.builtin.include_tasks: destroy_clean.yml
+      loop: "{{ repos }}"
+      loop_control:
+        label: "{{ item.name }}"

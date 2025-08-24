@@ -1,0 +1,20 @@
+- name: Check if repo directory exists
+  ansible.builtin.stat:
+    path: "{{ repo.path }}"
+  register: repo_stat
+
+- name: Create repo directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ repo.path }}"
+    state: directory
+    mode: '0755'
+    owner: tymalik
+    group: staff
+  when: not repo_stat.stat.exists
+
+- name: Clone repository if directory did not exist
+  ansible.builtin.git:
+    repo: "{{ repo.repo }}"
+    dest: "{{ repo.path }}"
+  when: not repo_stat.stat.exists
+

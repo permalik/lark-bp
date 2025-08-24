@@ -5,4 +5,4 @@ if [ -z "$SHELLED" ]; then
     exec "$SHELL" "$0" "$@"
 fi
 
-ansible-playbook -i ../inventory/hosts.yml ../playbook/prov.yml
+ansible-playbook -i ../inventory/hosts.yml ../playbook/init.yml
