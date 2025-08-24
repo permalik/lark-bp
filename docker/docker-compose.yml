@@ -1,0 +1,37 @@
+# docker network create lark-network
+# docker compose -f docker-compose.yml up --build
+
+services:
+  lark-web:
+    extends:
+      file: ../lark-web/docker-compose.yml
+      service: lark-web
+  lark-api:
+    extends:
+      file: ../lark-api/docker-compose.yml
+      service: lark-api
+  lark-pipe:
+    extends:
+      file: ../lark-pipe/docker-compose.yml
+      service: lark-pipe
+  lark-llm:
+    extends:
+      file: ../lark-llm/docker-compose.yml
+      service: lark-llm
+  lark-orc:
+    extends:
+      file: ../lark-orc/docker-compose.yml
+      service: lark-orc
+  lark-bus:
+    extends:
+      file: ../lark-bus/docker-compose.yml
+      service: lark-bus
+  lark-side:
+    extends:
+      file: ../lark-side/docker-compose.yml
+      service: lark-side
+
+networks:
+  lark-network:
+    external: true
+
