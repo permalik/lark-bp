@@ -1,7 +1,6 @@
 ---
 - name: Destroy System
-  hosts: local
-  connection: local
+  hosts: all
 
   vars:
     project_dir: "{{ lookup('env', 'PROJECT_DIR') }}"

@@ -25,7 +25,7 @@ HOST=${2:-}
 
 case "$MODE" in
     local)
-        echo "▶ Running playbook locally..."
+        echo "Running playbook locally..."
         ansible-playbook "$PLAYBOOK" -i "$INVENTORY" --limit localhost
         ;;
 
@@ -34,7 +34,7 @@ case "$MODE" in
             echo "Error: Remote host name required."
             usage
         fi
-        echo "▶ Running playbook against remote host: $HOST"
+        echo "Running playbook against remote: $HOST"
         ansible-playbook "$PLAYBOOK" -i "$INVENTORY" --limit "$HOST"
         ;;
 
