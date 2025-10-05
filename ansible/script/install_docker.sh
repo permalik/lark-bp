@@ -16,8 +16,13 @@ check_docker_healthy() {
     systemctl is-active --quiet docker && systemctl is-enabled --quiet docker
 }
 
-if check_docker_installed && check_docker_healthy; then
+check_compose_installed() {
+    command -v docker-compose >/dev/null 2>&1 || docker compose version >/dev/null 2>&1
+}
+
+if check_docker_installed && check_docker_healthy && check_compose_installed; then
     docker --version
+    docker compose version || docker-compose --version
     exit 0
 fi
 
@@ -52,4 +57,12 @@ fi
 sudo systemctl enable docker
 sudo systemctl start docker
 
+if ! check_compose_installed; then
+    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+    mkdir -p $DOCKER_CONFIG/cli-plugins
+    curl -SL https://github.com/docker/compose/releases/download/v2.30.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+fi
+
 docker --version || exit 1
+docker compose version || docker-compose --version

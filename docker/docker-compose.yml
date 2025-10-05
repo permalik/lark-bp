@@ -30,8 +30,3 @@ services:
     extends:
       file: ../lark-side/docker-compose.yml
       service: lark-side
-
-networks:
-  lark-network:
-    external: true
-
