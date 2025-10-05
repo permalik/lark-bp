@@ -1,0 +1,45 @@
+---
+- name: Check if Docker is installed
+  ansible.builtin.command: docker --version
+  register: docker_installed
+  ignore_errors: true
+
+- name: Fail gracefully if Docker is not installed
+  ansible.builtin.fail:
+    msg: "Docker is not installed on this host. Please install Docker manually."
+  when: docker_installed.rc != 0
+
+- name: Log in to GitHub Container Registry
+  community.docker.docker_login:
+    registry_url: ghcr.io
+    username: permalik
+    password: "{{ lookup('env', 'GHCR_PAT') }}"
+
+- name: Pull the image from GHCR
+  community.docker.docker_image:
+    name: "{{ image_name | default('ghcr.io/permalik/lark_web') }}"
+    tag: "{{ image_tag | default('default') }}"
+    source: pull
+
+- name: Stop existing container (if any)
+  community.docker.docker_container:
+    name: "{{ container_name | default('lark_web') }}"
+    image: "{{ image_name | default('ghcr.io/permalik/lark_web') }}:{{ image_tag | default('default') }}"
+    state: stopped
+  ignore_errors: yes
+
+- name: Remove old container (if any)
+  community.docker.docker_container:
+    name: "{{ container_name | default('lark_web') }}"
+    image: "{{ image_name | default('ghcr.io/permalik/lark_web') }}:{{ image_tag | default('default') }}"
+    state: absent
+  ignore_errors: yes
+
+- name: Run the container
+  community.docker.docker_container:
+    name: "{{ container_name | default('lark_web') }}"
+    image: "{{ image_name | default('ghcr.io/permalik/lark_web') }}:{{ image_tag | default('default') }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "5173:5173"

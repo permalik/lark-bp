@@ -1,10 +1,15 @@
 ansible==11.9.0
 ansible-core==2.18.8
+certifi==2025.10.5
 cffi==1.17.1
+charset-normalizer==3.4.3
 cryptography==45.0.6
+idna==3.10
 Jinja2==3.1.6
 MarkupSafe==3.0.2
 packaging==25.0
 pycparser==2.22
 PyYAML==6.0.2
+requests==2.32.5
 resolvelib==1.0.1
+urllib3==2.5.0

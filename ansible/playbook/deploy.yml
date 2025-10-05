@@ -1,0 +1,24 @@
+---
+- name: Dispatch deployment based on argument
+  hosts: all
+  become: true
+  vars:
+    target: "{{ deploy_target | default('all') }}"
+
+  tasks:
+    - name: Fail if unknown target
+      ansible.builtin.fail:
+        msg: "Unknown deploy target: {{ target }}"
+      when: target not in ["web", "api", "pipe", "all"]
+
+    - name: Deploy api service
+      ansible.builtin.include_tasks: deploy_api.yml
+      when: target in ["all", "api"]
+
+    - name: Deploy pipe service
+      ansible.builtin.include_tasks: deploy_pipe.yml
+      when: target in ["all", "pipe"]
+
+    - name: Deploy web service
+      ansible.builtin.include_tasks: deploy_web.yml
+      when: target in ["all", "web"]

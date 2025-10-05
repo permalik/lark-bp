@@ -1,0 +1,36 @@
+---
+- name: Ensure Docker is installed
+  ansible.builtin.package:
+    name: docker.io
+    state: present
+
+- name: Log in to GitHub Container Registry
+  community.docker.docker_login:
+    registry_url: ghcr.io
+    username: permalik
+    password: "{{ lookup('env', 'GHCR_PAT') }}"
+
+- name: Pull the image from GHCR
+  community.docker.docker_image:
+    name: "{{ image_name | default('ghcr.io/permalik/lark_pipe') }}"
+    tag: "{{ image_tag | default('default') }}"
+    source: pull
+
+- name: Stop existing container (if any)
+  community.docker.docker_container:
+    name: "{{ container_name | default('lark_pipe') }}"
+    state: stopped
+  ignore_errors: yes
+
+- name: Remove old container (if any)
+  community.docker.docker_container:
+    name: "{{ container_name | default('lark_pipe') }}"
+    state: absent
+  ignore_errors: yes
+
+- name: Run the container
+  community.docker.docker_container:
+    name: "{{ container_name | default('lark_pipe') }}"
+    image: "{{ image_name | default('ghcr.io/permalik/lark_pipe') }}:{{ image_tag | default('default') }}"
+    state: started
+    restart_policy: always
