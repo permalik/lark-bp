@@ -1,0 +1,17 @@
+---
+- name: Install Docker on target
+  hosts: all
+  become: true
+
+  vars:
+    project_dir: "{{ lookup('env', 'PROJECT_DIR') }}"
+
+  tasks:
+    - name: Copy Docker install script
+      copy:
+        src: "{{ project_dir }}lark-bp/ansible/script/install_docker.sh"
+        dest: /tmp/install_docker.sh
+        mode: '0755'
+
+    - name: Run Docker install script
+      command: /tmp/install_docker.sh
