@@ -8,8 +8,8 @@
     path: "{{ repo.path }}"
     state: directory
     mode: '0755'
-    owner: tymalik
-    group: staff
+    owner: permalik
+    group: permalik
   when: not repo_stat.stat.exists
 
 - name: Clone repository if directory did not exist

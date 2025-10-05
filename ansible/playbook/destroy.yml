@@ -4,30 +4,35 @@
   connection: local
 
   vars:
+    project_dir: "{{ lookup('env', 'PROJECT_DIR') }}"
     repos:
-      - path: ../../../lark-web
-        name: lark-web
-        commit_message: "destroy: local auto-commit"
-      - path: ../../../lark-api
+      - path: "{{ project_dir }}lark-api"
         name: lark-api
         commit_message: "destroy: local auto-commit"
-      - path: ../../../lark-pipe
-        name: lark-pipe
+      - path: "{{ project_dir }}lark-bus"
+        name: lark-bus
         commit_message: "destroy: local auto-commit"
-      - path: ../../../lark-llm
+      - path: "{{ project_dir }}lark-llm"
         name: lark-llm
         commit_message: "destroy: local auto-commit"
-      - path: ../../../lark-side
-        name: lark-side
-        commit_message: "destroy: local auto-commit"
-      - path: ../../../lark-orc
+      - path: "{{ project_dir }}lark-orc"
         name: lark-orc
         commit_message: "destroy: local auto-commit"
-      - path: ../../../lark-bus
-        name: lark-bus
+      - path: "{{ project_dir }}lark-pipe"
+        name: lark-pipe
+        commit_message: "destroy: local auto-commit"
+      - path: "{{ project_dir }}lark-side"
+        name: lark-side
+        commit_message: "destroy: local auto-commit"
+      - path: "{{ project_dir }}lark-web"
+        name: lark-web
         commit_message: "destroy: local auto-commit"
 
   tasks:
+    - name: debug
+      debug:
+        var: project_dir
+
     - name: Clean repositories
       ansible.builtin.include_tasks: destroy_clean.yml
       loop: "{{ repos }}"
